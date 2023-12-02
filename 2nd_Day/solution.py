@@ -63,4 +63,3 @@ def game_min_cubes(file):
 solution = game_min_cubes(file)
 print(f"\033[33m|\033[0mSum of the games power from part two equal: \033[32m{solution}\033[33m|")
 print(f"\033[33m|-------------------------------------------------|\033[0m")
-
