@@ -1,87 +1,75 @@
 # part one | *
-import re
 
-
-file = open('input.in', 'r').read()
-example = open('example.in', 'r').read()
-
-punctuation = set(list(re.findall("[^A-Za-z0-9]", file)))
-punctuation.remove('.')
-digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-
-file = file.split('\n')
-example = example.split('\n')
-
-
-def search_engine_schema(filepath):
-    engine_schema = []
-    column = 0
-    for line in filepath:
-        punctuation_index = [[column, index] for index, char in enumerate(list(line)) if char in punctuation]
-
-        if len(punctuation_index) != 0:
-            for index in punctuation_index:
-                numbers_area = [
-                    [index[0] - 1, index[1] - 1], [index[0] - 1, index[1]], [index[0] - 1, index[1] + 1],
-                    [index[0], index[1] - 1], [index[0], index[1] + 1],
-                    [index[0] + 1, index[1] - 1], [index[0]+1, index[1]], [index[0] - 1, index[1] + 1]
-                ]
-                for area in numbers_area:
-                    engine_schema.append([area, index])
-
-        column += 1
-
-    return engine_schema
+file = open('input.in', 'r').read().split('\n')
+example = open('example.in', 'r').read().split('\n')
 
 
 def engine_mapper(filepath):
-    column = 0
-    number_positions = []
-    for line in filepath:
-        digits_index = [[val, column, index] for index, val in enumerate(list(line)) if val in digits]
-        text_numbers = re.findall(r'\d+', line)
+    temp_solution = set()
 
-        container = []
-        temp_index = []
-        for digit in digits_index:
-            container.append(digit[0])
-            temp_index.append(digit[1:])
+    for row, content in enumerate(filepath):
+        for index, char in enumerate(content):
+            if char.isdigit() or char == '.':
+                continue
 
-            concat_container = ''.join(container)
-            if concat_container in text_numbers:
-                for index in temp_index:
-                    number_positions.append([concat_container, index[0], index[1]])
-                container.clear()
-                temp_index.clear()
-        column += 1
-    return number_positions
+            for y in [row - 1, row, row + 1]:
+                for x in [index - 1, index, index + 1]:
+                    if y < 0 or y >= len(filepath) or x < 0 or x >= len(filepath) or not filepath[y][x].isdigit():
+                        continue
+                    while x > 0 and filepath[y][x-1].isdigit():
+                        x -= 1
+                    temp_solution.add((y, x))
 
-
-def engine_calculations(engine_part_positions, engine_schema):
     solution = []
-    unique_parts = []
-    for parts in engine_part_positions:
-        for schema in engine_schema:
-            if parts[1:] == schema[0]:
-                solution.append([parts[0], schema[1]])
+    for y, x in temp_solution:
+        num = ""
+        while x < len(filepath[y]) and filepath[y][x].isdigit():
+            num += filepath[y][x]
+            x += 1
 
-    for solution_parts in solution:
-        if solution_parts not in unique_parts:
-            unique_parts.append(solution_parts)
-
-    solution_score = []
-
-    for parts in unique_parts:
-        solution_score.append(int(parts[0]))
-
-    return sum(solution_score)
+        solution.append(int(num))
+    return sum(solution)
 
 
-def solve_part_one(filepath):
-    engine_schema = search_engine_schema(filepath)
-    engine_part_positions = engine_mapper(filepath)
-    solution = engine_calculations(engine_schema=engine_schema,engine_part_positions=engine_part_positions)
-    return solution
+solution = engine_mapper(file)
+print(f"\033[33m|-------------------------------------------------------|\033[0m")
+print(f"\033[33m|\033[0mSum of the all part numbers from part one equal: \033[32m{solution}\033[33m|")
+print(f"\033[33m|-------------------------------------------------------|\033[0m")
+# part two | **
 
 
-print(solve_part_one(file))
+def engine_gears(filepath):
+
+    solution = []
+    for row, content in enumerate(filepath):
+        for index, char in enumerate(content):
+            if char != '*':
+                continue
+            temp_solution = set()
+            for y in [row - 1, row, row + 1]:
+                for x in [index - 1, index, index + 1]:
+                    if y < 0 or y >= len(filepath) or x < 0 or x >= len(filepath) or not filepath[y][x].isdigit():
+                        continue
+                    while x > 0 and filepath[y][x-1].isdigit():
+                        x -= 1
+                    temp_solution.add((y, x))
+
+            if len(temp_solution) != 2:
+                continue
+
+            pre_solution = []
+            for y, x in temp_solution:
+                num = ""
+                while x < len(filepath[y]) and filepath[y][x].isdigit():
+                    num += filepath[y][x]
+                    x += 1
+
+                pre_solution.append(int(num))
+            solution.append(pre_solution[0] * pre_solution[1])
+
+    return sum(solution)
+
+
+solution = engine_gears(file)
+print(f"\033[33m|\033[0mSum of the all gear ratio from part two equal: \033[32m{solution}\033[33m|")
+print(f"\033[33m|-------------------------------------------------------|\033[0m")
