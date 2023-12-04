@@ -47,7 +47,7 @@ def how_many_cards(filename):
         card_list.append(int(card.split(':')[0].split(' ')[-1]))
         clear_card_list.append(int(card.split(':')[0].split(' ')[-1]))
 
-    id = 1
+    x = 1
 
     copy_paste = {}
 
@@ -65,18 +65,18 @@ def how_many_cards(filename):
 
         match_numbers = list(set(my_numbers) & set(winning_numbers))
 
-        copy_paste[id] = len(match_numbers)
-        id += 1
+        copy_paste[x] = len(match_numbers)
+        x += 1
 
-    id = 1
+    x = 1
     for i in clear_card_list:
-        to_copy = clear_card_list[id:id+copy_paste[id]]
+        to_copy = clear_card_list[x:x+copy_paste[x]]
         cnt = card_list.count(i)
         for n in range(cnt):
             for copies in to_copy:
                 card_list.append(copies)
 
-        id += 1
+        x += 1
     return len(card_list)
 
 
