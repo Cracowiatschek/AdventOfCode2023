@@ -38,6 +38,7 @@ solution = score_card(file)
 print(f"\033[33m|-------------------------------------------------------|\033[0m")
 print(f"\033[33m|\033[0mTotal points from part one equal: \033[32m{solution}\033[33m                |")
 print(f"\033[33m|-------------------------------------------------------|\033[0m")
+# part two | **
 
 
 def how_many_cards(filename):
