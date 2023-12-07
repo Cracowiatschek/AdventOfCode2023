@@ -204,6 +204,6 @@ def camel_cards_extended(filepath):
 
 solution = camel_cards_extended(file)
 
-print(f"\033[33m|\033[0mSum of the total winnings from part one equal: \033[32m{solution}\033[33m|")
+print(f"\033[33m|\033[0mSum of the total winnings from part two equal: \033[32m{solution}\033[33m|")
 print(f"\033[33m|--------------------------------------------------------|\033[0m")
 
